@@ -24,6 +24,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final _suggestions = <WordPair>[];
+  final _saved = new Set<WordPair>();
   final _biggerFont = TextStyle(fontSize: 18, color: Colors.black);
 
   Widget _buildSuggestionList() {
@@ -41,11 +42,28 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildRow(WordPair pair) {
+    final bool alreadySaved = _saved.contains(pair);
     return ListTile(
-        title: Text(
-      pair.asPascalCase,
-      style: _biggerFont,
-    ));
+      title: Text(
+        pair.asPascalCase,
+        style: _biggerFont,
+      ),
+      subtitle: Text('Aykut Asil'),
+      trailing: new Icon(
+        // Add the lines from here...
+        alreadySaved ? Icons.favorite : Icons.favorite_border,
+        color: alreadySaved ? Colors.red : null,
+      ),
+      onTap: () {
+        setState(() {
+          if (alreadySaved) {
+            _saved.remove(pair);
+          } else {
+            _saved.add(pair);
+          }
+        });
+      },
+    );
   }
 
   @override
@@ -53,11 +71,42 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.list),
+            onPressed: _pushSaved,
+          )
+        ],
       ),
       body: _buildSuggestionList(),
       floatingActionButton: FloatingActionButton(
         onPressed: () => {},
         child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  void _pushSaved() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          final Iterable<ListTile> x = _saved.map((WordPair wordPair) {
+            return ListTile(
+              title: Text(wordPair.asPascalCase),
+            );
+          });
+
+          final Iterable<Widget> listTilesWidget = ListTile.divideTiles(
+            context: context,
+            tiles: x,
+          ).toList();
+
+          return Scaffold(
+              appBar: AppBar(
+                title: Text("Favori List"),
+              ),
+              body: ListView(children: listTilesWidget));
+        },
       ),
     );
   }
