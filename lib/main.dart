@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:testflutter/model/NewsArticle.dart';
+import 'package:testflutter/model/NewsHelper.dart';
 
 void main() => runApp(new MyApp());
 
@@ -6,11 +8,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Home',
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: new MyHomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -20,100 +23,209 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => new _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin {
-  Color whatsAppGreen = Color.fromRGBO(18, 140, 126, 1.0);
-  Color whatsAppGreenLight = Color.fromRGBO(37, 211, 102, 1.0);
-  var fabIcon = Icons.message;
-  TabController tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(vsync: this, length: 4)
-      ..addListener(() {
-        setState(() {
-          switch (tabController.index) {
-            case 0:
-              break;
-            case 1:
-              fabIcon = Icons.message;
-              break;
-            case 2:
-              fabIcon = Icons.camera_enhance;
-              break;
-            case 3:
-              fabIcon = Icons.call;
-              break;
-          }
-        });
-      });
-  }
-
-  Widget _buildPage1() {
-    return ListView.builder(
-      itemBuilder: (context, i) {
-        return ListTile(
-          title: Text("Aykut Asil"),
-          subtitle: Text("Selamlar"),
-          trailing: Icon(
-            Icons.account_circle,
-            size: 50,
-          ),
-        );
-      },
-      itemCount: 5,
-    );
-  }
-
+class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text(
-          "WhatsApp",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          "Home",
+          style: TextStyle(fontWeight: FontWeight.w400),
         ),
-        brightness: Brightness.light,
-        centerTitle: false,
-        backgroundColor: whatsAppGreen,
+        backgroundColor: Colors.black,
         actions: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(Icons.account_balance),
+            padding: const EdgeInsets.only(right: 24.0),
+            child: Icon(
+              Icons.notifications_none,
+              color: Colors.grey,
+            ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(Icons.access_time),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Icon(Icons.more_vert),
+            padding: const EdgeInsets.only(right: 12.0),
+            child: Icon(Icons.search, color: Colors.grey),
           ),
         ],
-        bottom: TabBar(
-          tabs: [
-            Tab(icon: Icon(Icons.camera_alt)),
-            Tab(child: Text("CHATS")),
-            Tab(child: Text("STATUS")),
-            Tab(child: Text("CALLS")),
+      ),
+      body: ListView.builder(
+        itemBuilder: (context, position) {
+          NewsArticle article = NewsHelper.getArticle(position);
+
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(0.0, 0.5, 0.0, 0.5),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      article.categoryTitle,
+                      style: TextStyle(
+                          color: Colors.black38,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16.0),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Flexible(
+                            child: Text(
+                              article.title,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 22.0),
+                            ),
+                            flex: 3,
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: Container(
+                                height: 80.0,
+                                width: 80.0,
+                                child: Image.asset(
+                                  "assets/" + article.imageAssetName,
+                                  fit: BoxFit.cover,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              article.author,
+                              style: TextStyle(fontSize: 18.0),
+                            ),
+                            Text(
+                              article.date + " . " + article.readTime,
+                              style: TextStyle(
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                        Icon(Icons.bookmark_border),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+        itemCount: 3,
+      ),
+      drawer: Drawer(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(32.0, 64.0, 32.0, 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Icon(
+                      Icons.account_circle,
+                      size: 90.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "John Doe",
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "See profile",
+                        style: TextStyle(color: Colors.black45),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                color: Colors.black12,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(40.0, 16.0, 40.0, 40.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Home",
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Audio",
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Bookmarks",
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Interests",
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                      ),
+                      Divider(),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Become a member",
+                          style: TextStyle(fontSize: 18.0, color: Colors.teal),
+                        ),
+                      ),
+                      Divider(),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "New Story",
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Stats",
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Drafts",
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
-          indicatorColor: Colors.white,
-          controller: tabController,
         ),
-      ),
-      body: TabBarView(
-        controller: tabController,
-        children: [
-          Text("Aykut Asil"),
-          _buildPage1(),
-          Icon(Icons.camera_alt),
-          Icon(Icons.camera_alt),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(fabIcon),
       ),
     );
   }
