@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(MyApp());
 
@@ -8,7 +11,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blueGrey),
+      theme: ThemeData(
+        primaryColor: Colors.blueAccent,
+        primarySwatch: Colors.blueGrey,
+      ),
       home: MyHomePage(title: 'Flutter Test'),
     );
   }
@@ -80,10 +86,21 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: _buildSuggestionList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
+        onPressed: _loadData,
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  _loadData() async {
+    String dataURL = "https://jsonplaceholder.typicode.com/posts";
+    http.Response response = await http.get(dataURL);
+    debugPrint("response");
+    /*
+    setState(() {
+      widgets = json.decode(response.body);
+    });
+    */
   }
 
   void _pushSaved() {
