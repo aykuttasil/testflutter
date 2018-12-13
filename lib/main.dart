@@ -1,129 +1,103 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
-import 'package:http/http.dart' as http;
 
-void main() => runApp(MyApp());
+void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return new MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primaryColor: Colors.blueAccent,
-        primarySwatch: Colors.blueGrey,
+      theme: new ThemeData(
+        primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Test'),
+      home: new MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => new _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final _suggestions = <WordPair>[];
-  final _saved = new Set<WordPair>();
-  final _biggerFont = TextStyle(fontSize: 18, color: Colors.black);
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
+  Color whatsAppGreen = Color.fromRGBO(18, 140, 126, 1.0);
+  Color whatsAppGreenLight = Color.fromRGBO(37, 211, 102, 1.0);
+  var fabIcon = Icons.message;
+  TabController tabController;
 
-  Widget _buildSuggestionList() {
-    return ListView.builder(
-      padding: EdgeInsets.all(10),
-      itemBuilder: (context, i) {
-        if (i.isOdd) return Divider();
-        final index = i ~/ 2;
-        if (index >= _suggestions.length) {
-          _suggestions.addAll(generateWordPairs().take(10));
-        }
-        return _buildRow(_suggestions[index]);
-      },
-    );
-  }
-
-  Widget _buildRow(WordPair pair) {
-    final bool alreadySaved = _saved.contains(pair);
-    return ListTile(
-      title: Text(
-        pair.asPascalCase,
-        style: _biggerFont,
-      ),
-      subtitle: Text('Aykut Asil'),
-      trailing: new Icon(
-        // Add the lines from here...
-        alreadySaved ? Icons.favorite : Icons.favorite_border,
-        color: alreadySaved ? Colors.red : null,
-      ),
-      onTap: () {
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(vsync: this, length: 4)
+      ..addListener(() {
         setState(() {
-          if (alreadySaved) {
-            _saved.remove(pair);
-          } else {
-            _saved.add(pair);
+          switch (tabController.index) {
+            case 0:
+              break;
+            case 1:
+              fabIcon = Icons.message;
+              break;
+            case 2:
+              fabIcon = Icons.camera_enhance;
+              break;
+            case 3:
+              fabIcon = Icons.call;
+              break;
           }
         });
-      },
-    );
+      });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text(
+          "WhatsApp",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        brightness: Brightness.light,
+        centerTitle: false,
+        backgroundColor: whatsAppGreen,
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.list),
-            onPressed: _pushSaved,
-          )
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(Icons.account_balance),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(Icons.access_time),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Icon(Icons.more_vert),
+          ),
+        ],
+        bottom: TabBar(
+          tabs: [
+            Tab(icon: Icon(Icons.camera_alt)),
+            Tab(child: Text("CHATS")),
+            Tab(child: Text("STATUS")),
+            Tab(child: Text("CALLS")),
+          ],
+          indicatorColor: Colors.white,
+          controller: tabController,
+        ),
+      ),
+      body: TabBarView(
+        controller: tabController,
+        children: [
+          Text("Aykut Asil"),
+          Icon(Icons.camera_alt),
+          Icon(Icons.camera_alt),
+          Icon(Icons.camera_alt),
         ],
       ),
-      body: _buildSuggestionList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: _loadData,
-        child: Icon(Icons.add),
-      ),
-    );
-  }
-
-  _loadData() async {
-    String dataURL = "https://jsonplaceholder.typicode.com/posts";
-    http.Response response = await http.get(dataURL);
-    debugPrint("response");
-    /*
-    setState(() {
-      widgets = json.decode(response.body);
-    });
-    */
-  }
-
-  void _pushSaved() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (BuildContext context) {
-          final Iterable<ListTile> x = _saved.map((WordPair wordPair) {
-            return ListTile(
-              title: Text(wordPair.asPascalCase),
-            );
-          });
-
-          final Iterable<Widget> listTilesWidget = ListTile.divideTiles(
-            context: context,
-            tiles: x,
-          ).toList();
-
-          return Scaffold(
-              appBar: AppBar(
-                title: Text("Favori List"),
-              ),
-              body: ListView(children: listTilesWidget));
-        },
+        onPressed: () {},
+        child: Icon(fabIcon),
       ),
     );
   }
