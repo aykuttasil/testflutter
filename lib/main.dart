@@ -50,6 +50,22 @@ class _MyHomePageState extends State<MyHomePage>
       });
   }
 
+  Widget _buildPage1() {
+    return ListView.builder(
+      itemBuilder: (context, i) {
+        return ListTile(
+          title: Text("Aykut Asil"),
+          subtitle: Text("Selamlar"),
+          trailing: Icon(
+            Icons.account_circle,
+            size: 50,
+          ),
+        );
+      },
+      itemCount: 5,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -90,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage>
         controller: tabController,
         children: [
           Text("Aykut Asil"),
-          Icon(Icons.camera_alt),
+          _buildPage1(),
           Icon(Icons.camera_alt),
           Icon(Icons.camera_alt),
         ],
