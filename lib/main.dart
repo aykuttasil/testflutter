@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:testflutter/model/NewsArticle.dart';
-import 'package:testflutter/model/NewsHelper.dart';
+import 'package:testflutter/widget/filterbox.dart';
 
 void main() => runApp(new MyApp());
 
@@ -10,8 +9,9 @@ class MyApp extends StatelessWidget {
     return new MaterialApp(
       title: 'Home',
       theme: new ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          primarySwatch: Colors.blue,
+          backgroundColor: Colors.amber,
+          primaryColor: Colors.red),
       home: new MyHomePage(),
       debugShowCheckedModeBanner: true,
     );
@@ -29,7 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text(
-          "Home",
+          "Filter Box",
           style: TextStyle(fontWeight: FontWeight.w900),
         ),
         backgroundColor: Colors.black,
@@ -47,190 +47,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: buildListView(),
-      drawer: Drawer(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(32.0, 64.0, 32.0, 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Icon(
-                      Icons.account_circle,
-                      size: 90.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "John Doe",
-                        style: TextStyle(fontSize: 20.0),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "See profile",
-                        style: TextStyle(color: Colors.black45),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                color: Colors.black12,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(40.0, 16.0, 40.0, 40.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Home",
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Audio",
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Bookmarks",
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Interests",
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                      ),
-                      Divider(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Become a member",
-                          style: TextStyle(fontSize: 18.0, color: Colors.teal),
-                        ),
-                      ),
-                      Divider(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "New Story",
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Stats",
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Drafts",
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  ListView buildListView() {
-    return ListView.builder(
-      itemBuilder: (context, position) {
-        NewsArticle article = NewsHelper.getArticle(position);
-
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(3, 1, 3, 2),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    article.categoryTitle,
-                    style: TextStyle(
-                        color: Colors.black38,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.0),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Flexible(
-                          child: Text(
-                            article.title,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 22.0),
-                          ),
-                          flex: 4,
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Container(
-                              height: 80.0,
-                              width: 80.0,
-                              child: Image.asset(
-                                "assets/" + article.imageAssetName,
-                                fit: BoxFit.cover,
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            article.author,
-                            style: TextStyle(fontSize: 18.0),
-                          ),
-                          Text(
-                            article.date + " . " + article.readTime,
-                            style: TextStyle(
-                                color: Colors.black45,
-                                fontWeight: FontWeight.w500),
-                          )
-                        ],
-                      ),
-                      Icon(Icons.bookmark_border),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-      itemCount: 3,
+      body: Center(child: FilterBox()),
+      backgroundColor: Colors.white,
     );
   }
 }
