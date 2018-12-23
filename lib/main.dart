@@ -1,4 +1,4 @@
-import 'package:flight_search/ui/animation_test.dart';
+import 'package:flight_search/ui/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: AnimationTestPage(),
+      home: HomePage(),      
     );
   }
 }
