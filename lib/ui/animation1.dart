@@ -26,7 +26,7 @@ class _AnimationPageState extends State<AnimationPage> {
       ),
       body: Container(
         width: double.infinity,
-        color: Colors.red,
+        color: Colors.grey,
         child: _buildX(),
       ),
       floatingActionButton: FloatingActionButton(
