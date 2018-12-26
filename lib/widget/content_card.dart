@@ -1,4 +1,3 @@
-import 'package:flight_search/ui/animation_test.dart';
 import 'package:flight_search/widget/multicity_input.dart';
 import 'package:flight_search/widget/price_tab.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +39,7 @@ class _ContentCardState extends State<ContentCard> {
           top: null,
           child: Container(
             height: 2.0,
-            color: Color(0xFFEEEEEE),
+            color: Colors.cyan[50],
           ),
         ),
         TabBar(
