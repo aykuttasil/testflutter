@@ -27,6 +27,7 @@ class _ContentCardState extends State<ContentCard> {
             );
           },
         ),
+        
         length: 3,
       ),
     );
